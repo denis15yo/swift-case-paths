@@ -391,7 +391,6 @@ extension CasePathable {
     dynamicMember keyPath: KeyPath<Self.AllCasePaths, AnyCasePath<Self, Value>>
   ) -> Value? {
     get { Self.allCasePaths[keyPath: keyPath].extract(from: self) }
-    @available(*, unavailable, message: "Write 'enum = .case(value)', not 'enum.case = value'")
     set {
       let casePath = Self.allCasePaths[keyPath: keyPath]
       guard casePath.extract(from: self) != nil else {
@@ -400,22 +399,6 @@ extension CasePathable {
       if let newValue {
         self = casePath.embed(newValue)
       }
-    }
-  }
-
-  /// Embeds the associated value of a case via dynamic member lookup.
-  @_disfavoredOverload
-  public subscript<Value>(
-    dynamicMember keyPath: KeyPath<Self.AllCasePaths, AnyCasePath<Self, Value>>
-  ) -> Value {
-    @available(*, unavailable)
-    get { Self.allCasePaths[keyPath: keyPath].extract(from: self)! }
-    set {
-      let casePath = Self.allCasePaths[keyPath: keyPath]
-      guard casePath.extract(from: self) != nil else {
-        return
-      }
-      self = casePath.embed(newValue)
     }
   }
 
